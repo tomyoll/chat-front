@@ -16,34 +16,30 @@ class Api {
 
     this.notificationStore = useAuthStore()
 
-    // this.instance.interceptors.request.use(async (config) => {
-    //   if (!this.store.authData && localStorage.getItem('auth_token')) {
-    //     const tokenInfo = await axios.get('http://localhost:3000/auth/validate', {
-    //       headers: {
-    //         Accept: 'application/json',
-    //         Authorization: `Bearer ${localStorage.getItem('auth_token')}`
-    //       }
-    //     })
+    this.instance.interceptors.request.use(async (config) => {
+      if (!this.store.user.id && localStorage.getItem('auth_token')) {
+        const tokenInfo = await axios.get(`${import.meta.env.VITE_API_URL}auth/validate`, {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('auth_token')}`
+          }
+        })
 
-    //     if (tokenInfo.data) {
-    //       this.store.logIn({ auth_token: localStorage.getItem('auth_token'), user: tokenInfo.data })
-    //       return config
-    //     } else {
-    //       localStorage.removeItem('user')
-    //       localStorage.removeItem('auth_token')
-    //       window.location.href = this.loginUrl
-    //     }
-    //   }
-
-    //   return config
-    // })
-
-    this.instance.interceptors.response.use(async (response) => {
-      if (response.status === 401) {
-        // return this.router.push('/login')
+        if (tokenInfo.data) {
+          this.store.LOGIN({
+            auth_token: localStorage.getItem('auth_token'),
+            user: tokenInfo.data,
+            withRedirect: false
+          })
+          return config
+        } else {
+          localStorage.removeItem('user')
+          localStorage.removeItem('auth_token')
+          window.location.href = this.loginUrl
+        }
       }
 
-      return response
+      return config
     })
   }
 

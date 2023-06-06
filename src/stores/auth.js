@@ -26,10 +26,12 @@ export const useAuthStore = defineStore('[Auth]', {
   },
 
   actions: {
-    LOGIN({ auth_token, user }) {
+    LOGIN({ auth_token, user, withRedirect = true }) {
       this.user = user
       this.session.authToken = auth_token
-      window.location.href = '/'
+      if (withRedirect) {
+        window.location.href = '/'
+      }
     },
 
     REFRESH_SESSION({ auth_token }) {

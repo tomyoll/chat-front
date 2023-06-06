@@ -120,7 +120,8 @@ async function fetchMessages() {
 }
 
 function isUserMessages(cluster) {
-  return cluster.userId === userData?.authData?.user?.id
+  console.log(userData?.user?.id, cluster.userId)
+  return cluster.userId === userData?.user?.id
 }
 
 async function fetchOlderMessages() {
