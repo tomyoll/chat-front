@@ -162,11 +162,6 @@ async function sendMessage() {
 
     await MessageService.sendMessage(chat.value.id, { content: trimmed }).finally(async () => {
       sendingMessage.value = false
-
-      messageClusters.value.push({
-        userId: userData.user.id,
-        messages: [{ id: 1, type: 'message', content: trimmed }]
-      })
     })
 
     messageInput.value = ''
