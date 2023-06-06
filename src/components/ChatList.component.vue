@@ -2,11 +2,14 @@
 import http from '../http'
 import { onMounted, ref } from 'vue'
 import { useNotificationStore } from '../stores/notification'
+import { useAuthStore } from '../stores/auth'
+
 import Notification from './AlertNotification.component.vue'
 import Search from './SearchComponent.component.vue'
 import { useRouter } from 'vue-router'
 
 const notificationStore = useNotificationStore()
+const authStore = useAuthStore()
 
 const showNotification = (message, type) => {
   notificationStore.addNotification({
@@ -51,6 +54,17 @@ async function fetchUsers() {
 
   users.value = usersResponse.users
 }
+
+async function openChat(userId) {
+  const chatResponse = await http.post({
+    path: 'chats/',
+    data: {
+      user_id: userId
+    }
+  })
+
+  router.push(`/chat/${chatResponse.id}`)
+}
 </script>
 
 <template>
@@ -92,9 +106,11 @@ async function fetchUsers() {
             <ul v-for="user in users" :key="user.id">
               <div class="divider"></div>
               <li class="mt-5">
-                <span class="badge hover:bg-base-300 text-base-content bg-base-200 h-10 w-full">{{
-                  user.name
-                }}</span>
+                <span
+                  @click="openChat(user.id)"
+                  class="badge hover:bg-base-300 text-base-content bg-base-200 h-10 w-full"
+                  >{{ user.name }}</span
+                >
               </li>
             </ul>
           </div>

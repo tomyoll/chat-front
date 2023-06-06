@@ -1,7 +1,7 @@
 <template>
   <div class="bg-base-300 container w-screen">
     <!-- Chat section -->
-    <div class="flex flex-col flex-grow max-h-screen">
+    <div class="flex flex-col flex-grow h-screen">
       <div class="navbar bg-base-100">
         <div class="flex-1">
           <button @click="() => router.back()" class="mr-2">
